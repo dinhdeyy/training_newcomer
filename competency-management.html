@@ -934,6 +934,10 @@ function renderMapGrid(){
     el.addEventListener('click', open);
     el.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(); } });
     mapGrid.appendChild(el);
+    // Card được tạo SAU khi scroll-reveal đã quét DOM lần đầu (vì giờ chờ đồng bộ
+    // dữ liệu quiz xong mới render), nên phải tự đăng ký với observer 'io' để
+    // không bị kẹt mãi ở trạng thái opacity:0 (ẩn).
+    if(typeof io !== 'undefined' && !mapGridRenderedOnce) io.observe(el);
   });
   mapGridRenderedOnce = true;
 }
