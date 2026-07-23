@@ -77,6 +77,13 @@ nav{
   transition:.25s;font-weight:500;white-space:nowrap;
 }
 .nav-links a:hover{color:var(--text);background:var(--glass-strong);}
+.nav-cta{
+  display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:100px;
+  background:linear-gradient(135deg,var(--purple),var(--cyan));color:#050816 !important;
+  font-size:13px;font-weight:700;white-space:nowrap;margin-left:10px;transition:.3s;
+  box-shadow:0 6px 20px rgba(108,60,224,0.4);
+}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(34,211,238,0.4);}
 .burger{display:none;flex-direction:column;gap:5px;cursor:pointer;z-index:200;}
 .burger span{width:22px;height:2px;background:var(--text);border-radius:2px;}
 
@@ -295,6 +302,39 @@ footer h3{font-size:20px;margin-bottom:6px;}
 footer p{color:var(--muted);font-size:13px;}
 .footer-meta{margin-top:22px;display:flex;justify-content:center;gap:22px;flex-wrap:wrap;color:var(--muted-dim);font-size:12px;font-family:'JetBrains Mono',monospace;}
 
+/* ===== COMPETENCY SPOTLIGHT (featured) ===== */
+.spotlight-section{padding:0 0 60px;}
+.spotlight-card{
+  padding:44px 46px;position:relative;overflow:hidden;
+  border:1px solid rgba(34,211,238,0.3);
+}
+.spotlight-card::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 600px 400px at 100% 0%, rgba(34,211,238,0.16), transparent 60%),
+             radial-gradient(ellipse 600px 400px at 0% 100%, rgba(108,60,224,0.18), transparent 60%);
+}
+.spotlight-badge{
+  display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:100px;
+  background:var(--glass-strong);border:1px solid rgba(34,211,238,0.4);
+  font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--cyan);margin-bottom:20px;
+  position:relative;text-transform:uppercase;letter-spacing:0.05em;
+}
+.spotlight-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:44px;align-items:center;position:relative;}
+.spotlight-title{font-size:clamp(22px,2.6vw,30px);font-weight:700;margin-bottom:14px;}
+.spotlight-desc{color:var(--muted);font-size:15px;max-width:560px;}
+.spotlight-desc strong{color:var(--text);}
+.spotlight-actions{display:flex;gap:14px;margin-top:28px;flex-wrap:wrap;}
+.spotlight-flow{display:flex;flex-direction:column;gap:10px;}
+.flow-mini-step{
+  padding:14px 18px;border-radius:14px;background:var(--glass-strong);border:1px solid var(--border);
+  font-size:13.5px;font-weight:600;display:flex;align-items:center;gap:10px;
+}
+.flow-mini-step.final{
+  background:linear-gradient(135deg,rgba(108,60,224,0.35),rgba(34,211,238,0.22));
+  border-color:rgba(34,211,238,0.4);box-shadow:0 0 24px rgba(34,211,238,0.2);
+}
+.flow-mini-arrow{color:var(--muted-dim);font-size:13px;text-align:center;margin:-4px 0;}
+
 /* ===== SCROLLBAR ===== */
 ::-webkit-scrollbar{width:10px;}
 ::-webkit-scrollbar-track{background:var(--bg);}
@@ -309,8 +349,10 @@ a:focus-visible, .btn:focus-visible, .acc-head:focus-visible{outline:2px solid v
   .stat-row{grid-template-columns:repeat(2,1fr);}
   .dash-stats{grid-template-columns:repeat(2,1fr);}
   .timeline-wrap{flex-direction:column;}
+  .spotlight-grid{grid-template-columns:1fr;}
 }
 @media(max-width:768px){
+  .nav-cta{display:none;}
   .nav-links{
     position:fixed;top:0;right:-100%;width:70%;height:100vh;flex-direction:column;
     background:rgba(5,8,22,0.97);backdrop-filter:blur(20px);padding:100px 30px;gap:6px;
@@ -356,6 +398,7 @@ a:focus-visible, .btn:focus-visible, .acc-head:focus-visible{outline:2px solid v
     <li><a href="competency-management.html#requirement-standard">Chuẩn Video SOP</a></li>
     <li><a href="#dinh-huong">Định hướng phát triển</a></li>
   </ul>
+  <a href="competency-management.html" class="nav-cta">🏅 Đánh giá năng lực</a>
   <div class="burger" id="burger"><span></span><span></span><span></span></div>
 </nav>
 
@@ -387,6 +430,34 @@ a:focus-visible, .btn:focus-visible, .acc-head:focus-visible{outline:2px solid v
       <div class="glass stat-card reveal">
         <div class="stat-num-text">2023 → Nay</div>
         <div class="stat-label">Hành trình xây dựng thư viện (YTD)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPOTLIGHT: COMPETENCY MANAGEMENT (featured) -->
+<section class="spotlight-section" id="competency-spotlight">
+  <div class="wrap">
+    <div class="glass spotlight-card reveal">
+      <div class="spotlight-badge">🌟 Tính năng nổi bật</div>
+      <div class="spotlight-grid">
+        <div>
+          <h2 class="spotlight-title">Xem xong Video SOP rồi — vậy đã đủ khả năng vận hành thực tế chưa?</h2>
+          <p class="spotlight-desc">Module <strong>Competency Management</strong> theo dõi toàn bộ hành trình đào tạo của từng Operator: xem Video SOP, làm bài kiểm tra kiến thức chấm điểm tự động, đánh giá thực hành cùng Trainer, và ghi nhận thành tích cho đến khi chính thức trở thành <strong>Qualified Operator</strong>.</p>
+          <div class="spotlight-actions">
+            <a href="competency-management.html" class="btn btn-primary">Mở Đánh giá năng lực →</a>
+            <a href="competency-management.html#requirement-standard" class="btn btn-ghost">Xem chuẩn Video SOP</a>
+          </div>
+        </div>
+        <div class="spotlight-flow">
+          <div class="flow-mini-step">📹 &nbsp;Watch SOP Video</div>
+          <div class="flow-mini-arrow">↓</div>
+          <div class="flow-mini-step">🧠 &nbsp;Quiz kiểm tra kiến thức</div>
+          <div class="flow-mini-arrow">↓</div>
+          <div class="flow-mini-step">🧑‍🏫 &nbsp;Trainer đánh giá thực hành</div>
+          <div class="flow-mini-arrow">↓</div>
+          <div class="flow-mini-step final">🏅 &nbsp;Qualified Operator</div>
+        </div>
       </div>
     </div>
   </div>
