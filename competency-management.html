@@ -529,17 +529,17 @@ a:focus-visible, .btn:focus-visible, .map-card:focus-visible{outline:2px solid v
     <div class="profile-grid">
       <div class="glass profile-card reveal">
         <div class="profile-head">
-          <div class="avatar">A</div>
+          <div class="avatar" id="profileAvatar">A</div>
           <div>
-            <div class="profile-name">Nguyễn Văn A</div>
-            <div class="profile-role">Operator — DECAF Operation</div>
+            <div class="profile-name" id="profileName">Nguyễn Văn A</div>
+            <div class="profile-role" id="profileRole">Operator — DECAF Operation</div>
           </div>
         </div>
         <div class="info-row"><span class="k">Department</span><span class="v">DECAF Operation</span></div>
-        <div class="info-row"><span class="k">Position</span><span class="v">Operator</span></div>
-        <div class="info-row"><span class="k">Trainer</span><span class="v">Nguyễn Văn B</span></div>
-        <div class="info-row"><span class="k">Training Start Date</span><span class="v">01/07/2026</span></div>
-        <div class="info-row"><span class="k">Trạng thái</span><span class="v"><span class="badge badge-yellow">In Training</span></span></div>
+        <div class="info-row"><span class="k">Position</span><span class="v" id="profilePosition">Operator</span></div>
+        <div class="info-row"><span class="k">Trainer</span><span class="v" id="profileTrainer">Nguyễn Văn B</span></div>
+        <div class="info-row"><span class="k">Ngày hoàn thành gần nhất</span><span class="v" id="profileDate">01/07/2026</span></div>
+        <div class="info-row"><span class="k">Trạng thái</span><span class="v" id="profileStatusWrap"><span class="badge badge-yellow" id="profileStatusBadge">In Training</span></span></div>
       </div>
 
       <div class="glass summary-card reveal">
@@ -759,7 +759,7 @@ a:focus-visible, .btn:focus-visible, .map-card:focus-visible{outline:2px solid v
     <div class="glass cert-card reveal">
       <div class="cert-eyebrow mono">Operator Qualification</div>
       <div class="cert-title">Chứng nhận năng lực vận hành DECAF</div>
-      <div class="cert-name">Employee: <b>Nguyễn Văn A</b></div>
+      <div class="cert-name">Employee: <b id="certName">Nguyễn Văn A</b></div>
 
       <ul class="cert-checklist">
         <li>Safety Training</li>
@@ -769,10 +769,10 @@ a:focus-visible, .btn:focus-visible, .map-card:focus-visible{outline:2px solid v
         <li>Competency Assessment</li>
       </ul>
 
-      <div class="cert-status">🏅 QUALIFIED OPERATOR — Process: EXT</div>
+      <div class="cert-status" id="certStatus">🏅 QUALIFIED OPERATOR — Process: EXT</div>
 
       <div class="cert-sign-row">
-        <div class="cert-sign"><div class="role">Approved by — Trainer</div><div class="name">Nguyễn Văn B</div></div>
+        <div class="cert-sign"><div class="role">Approved by — Trainer</div><div class="name" id="certTrainer">Nguyễn Văn B</div></div>
         <div class="cert-sign"><div class="role">Approved by — Supervisor</div><div class="name">Nguyễn Văn C</div></div>
       </div>
     </div>
@@ -1337,6 +1337,54 @@ document.getElementById('qSubmitBtn').addEventListener('click', ()=>{
   renderQuizRecordTable();
   showOperatorHistory();
   quizResultStep.scrollIntoView({behavior:'smooth', block:'center'});
+});
+
+/* ---- LIÊN KẾT KẾT QUẢ QUIZ VỚI EMPLOYEE PROFILE & FINAL QUALIFICATION ----
+   Mỗi khi có người trả lời ĐÚNG HẾT / ĐẠT (PASS) bộ câu hỏi, thông tin của
+   người đó sẽ được cập nhật vào 2 chỗ:
+   - Employee Training Profile (thẻ hồ sơ ở đầu trang)
+   - Final Qualification (thẻ chứng nhận cuối trang)
+   Dữ liệu người "mới nhất vừa đạt" cũng được lưu lại trong localStorage,
+   nên khi tải lại trang, 2 khối này vẫn hiển thị đúng người gần nhất. */
+function formatDateVN(dateStr){
+  if(!dateStr) return '—';
+  const parts = dateStr.split('-');
+  if(parts.length!==3) return dateStr;
+  return `${parts[2]}/${parts[1]}/${parts[0]}`;
+}
+
+function updateLatestAchievement(record){
+  const initial = record.name.trim().charAt(0).toUpperCase() || '?';
+
+  document.getElementById('profileAvatar').textContent = initial;
+  document.getElementById('profileName').textContent = record.name;
+  document.getElementById('profileRole').textContent = `${record.position} — ${record.process} Operation`;
+  document.getElementById('profilePosition').textContent = record.position;
+  document.getElementById('profileTrainer').textContent = record.trainer;
+  document.getElementById('profileDate').textContent = formatDateVN(record.date);
+  const statusBadge = document.getElementById('profileStatusBadge');
+  statusBadge.className = 'badge badge-green';
+  statusBadge.textContent = 'Qualified';
+
+  document.getElementById('certName').textContent = record.name;
+  document.getElementById('certStatus').textContent = `🏅 QUALIFIED OPERATOR — Process: ${record.process} · ${record.topic}`;
+  document.getElementById('certTrainer').textContent = record.trainer;
+}
+
+/* Khi tải trang: tìm bản ghi PASS gần nhất (theo thời gian nộp bài) để hiển thị sẵn */
+(function initLatestAchievementOnLoad(){
+  const passRecords = loadQuizRecords().filter(r=>r.result==='PASS');
+  if(passRecords.length===0) return;
+  const latest = passRecords.reduce((a,b)=> (a.ts>b.ts ? a : b));
+  updateLatestAchievement(latest);
+})();
+
+document.getElementById('qSubmitBtn').addEventListener('click', ()=>{
+  const latestPass = loadQuizRecords().filter(r=>r.result==='PASS').reduce((a,b)=>{
+    if(!a) return b;
+    return (a.ts>b.ts ? a : b);
+  }, null);
+  if(latestPass) updateLatestAchievement(latestPass);
 });
 
 document.getElementById('qRetakeBtn').addEventListener('click', ()=>{
