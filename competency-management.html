@@ -370,6 +370,66 @@ footer h3{font-size:20px;margin-bottom:6px;}
 footer p{color:var(--muted);font-size:13px;}
 .footer-meta{margin-top:22px;display:flex;justify-content:center;gap:22px;flex-wrap:wrap;color:var(--muted-dim);font-size:12px;font-family:'JetBrains Mono',monospace;}
 
+/* ===== SECTION 1B: TRAINING VERIFICATION QUIZ ===== */
+.quiz-panel{padding:38px 36px;}
+.quiz-step{margin-bottom:34px;}
+.quiz-step:last-child{margin-bottom:0;}
+.quiz-step-label{
+  font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--cyan);text-transform:uppercase;
+  letter-spacing:0.08em;margin-bottom:16px;display:flex;align-items:center;gap:10px;
+}
+.quiz-step-label .num{
+  width:22px;height:22px;border-radius:50%;background:var(--glass-strong);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--text);flex-shrink:0;
+}
+.select-field{
+  width:100%;max-width:440px;padding:14px 18px;border-radius:14px;background:var(--glass-strong);
+  border:1px solid var(--border);color:var(--text);font-family:'Inter',sans-serif;font-size:14.5px;cursor:pointer;
+}
+.select-field option{background:var(--navy);color:var(--text);}
+.topic-grid{display:flex;flex-wrap:wrap;gap:10px;}
+.topic-pill{
+  padding:11px 20px;border-radius:100px;background:var(--glass-strong);border:1px solid var(--border);
+  font-size:13.5px;cursor:pointer;transition:.25s;color:var(--muted);
+}
+.topic-pill:hover{border-color:rgba(34,211,238,0.4);color:var(--text);}
+.topic-pill.active{background:linear-gradient(135deg,var(--purple),var(--cyan));color:#050816;font-weight:600;border-color:transparent;}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+.field-label{font-size:12px;color:var(--muted);margin-bottom:8px;display:block;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.04em;}
+.input-field{
+  width:100%;padding:13px 16px;border-radius:12px;background:var(--glass-strong);border:1px solid var(--border);
+  color:var(--text);font-family:'Inter',sans-serif;font-size:14px;
+}
+.input-field:focus{outline:none;border-color:rgba(34,211,238,0.5);}
+.input-field::placeholder{color:var(--muted-dim);}
+.history-box{margin-top:22px;padding:20px 22px;border-radius:16px;background:rgba(255,255,255,0.03);border:1px solid var(--border);}
+.history-box h5{font-size:12px;text-transform:uppercase;letter-spacing:0.06em;color:var(--cyan);font-family:'JetBrains Mono',monospace;margin-bottom:12px;}
+.history-row{display:flex;justify-content:space-between;gap:14px;font-size:13px;padding:9px 0;border-top:1px solid var(--border);color:var(--muted);flex-wrap:wrap;}
+.history-row:first-of-type{border-top:none;}
+.history-row .v{color:var(--text);font-weight:600;}
+.quiz-q{padding:22px 0;border-top:1px solid var(--border);}
+.quiz-q:first-child{border-top:none;padding-top:0;}
+.quiz-q-tag{
+  display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--purple-soft);
+  background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.3);padding:3px 10px;border-radius:100px;
+  margin-bottom:10px;text-transform:uppercase;letter-spacing:0.05em;
+}
+.quiz-q-head{display:flex;gap:12px;margin-bottom:14px;align-items:baseline;}
+.quiz-q-num{font-family:'JetBrains Mono',monospace;color:var(--cyan);font-size:13px;flex-shrink:0;}
+.quiz-q-text{font-size:14.5px;font-weight:600;}
+.quiz-options{display:flex;flex-direction:column;gap:9px;padding-left:0;}
+.quiz-opt{
+  display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:12px;background:rgba(255,255,255,0.02);
+  border:1px solid transparent;cursor:pointer;font-size:13.7px;transition:.2s;
+}
+.quiz-opt:hover{background:rgba(255,255,255,0.05);}
+.quiz-opt input{accent-color:var(--cyan);width:16px;height:16px;flex-shrink:0;}
+.quiz-opt.correct{border-color:rgba(52,211,153,0.4);background:rgba(52,211,153,0.08);}
+.quiz-opt.wrong{border-color:rgba(248,113,113,0.4);background:rgba(248,113,113,0.08);}
+.quiz-result-box{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
+.hidden{display:none !important;}
+@media(max-width:640px){.form-grid{grid-template-columns:1fr;}}
+
 /* ===== SCROLLBAR ===== */
 ::-webkit-scrollbar{width:10px;}
 ::-webkit-scrollbar-track{background:var(--bg);}
@@ -383,6 +443,7 @@ a:focus-visible, .btn:focus-visible, .map-card:focus-visible{outline:2px solid v
   .grid-3{grid-template-columns:repeat(2,1fr);}
   .grid-4{grid-template-columns:repeat(2,1fr);}
   .profile-grid{grid-template-columns:1fr;}
+  .form-grid{grid-template-columns:1fr;}
   .crit-row{grid-template-columns:24px 1fr;}
   .rating-scale{grid-column:1 / -1;justify-content:flex-start;margin-top:10px;}
   .cert-checklist{grid-template-columns:1fr;}
@@ -512,6 +573,87 @@ a:focus-visible, .btn:focus-visible, .map-card:focus-visible{outline:2px solid v
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 1B: TRAINING VERIFICATION QUIZ -->
+<section id="quiz-verification">
+  <div class="wrap">
+    <div class="eyebrow reveal">Kiểm tra sau đào tạo</div>
+    <h2 class="sec-title reveal">Video SOP Training Quiz</h2>
+    <p class="sec-desc reveal">Chọn Process, chọn Video SOP đã học, điền thông tin Operator rồi làm bộ câu hỏi kiểm tra ngắn. Hệ thống tự chấm điểm và lưu lại kết quả theo tên — lần sau đăng nhập tên khác, dữ liệu của người trước vẫn được giữ nguyên trong lịch sử.</p>
+
+    <div class="glass quiz-panel reveal">
+
+      <div class="quiz-step" id="quizStep1">
+        <div class="quiz-step-label"><span class="num">1</span> Chọn Process</div>
+        <select class="select-field" id="quizProcessSelect">
+          <option value="">— Chọn Process —</option>
+        </select>
+      </div>
+
+      <div class="quiz-step hidden" id="quizTopicStep">
+        <div class="quiz-step-label"><span class="num">2</span> Chọn Video SOP / Chủ đề</div>
+        <div class="topic-grid" id="quizTopicList"></div>
+      </div>
+
+      <div class="quiz-step hidden" id="quizFormStep">
+        <div class="quiz-step-label"><span class="num">3</span> Thông tin Operator</div>
+        <div class="form-grid">
+          <div>
+            <label class="field-label">Tên Operator</label>
+            <input class="input-field" id="qOperatorName" placeholder="VD: Nguyễn Văn A" autocomplete="off">
+          </div>
+          <div>
+            <label class="field-label">Position</label>
+            <input class="input-field" id="qPosition" placeholder="VD: Operator" autocomplete="off">
+          </div>
+          <div>
+            <label class="field-label">Trainer</label>
+            <input class="input-field" id="qTrainer" placeholder="VD: Nguyễn Văn B" autocomplete="off">
+          </div>
+          <div>
+            <label class="field-label">Ngày Train</label>
+            <input class="input-field" type="date" id="qDate">
+          </div>
+        </div>
+        <div class="history-box hidden" id="historyBox">
+          <h5>Lịch sử làm bài của Operator này</h5>
+          <div id="historyList"></div>
+        </div>
+      </div>
+
+      <div class="quiz-step hidden" id="quizQuestionsStep">
+        <div class="quiz-step-label"><span class="num">4</span> Bộ câu hỏi kiểm tra — <span class="mono" id="quizTopicTitle" style="color:var(--text);"></span></div>
+        <div id="quizQuestions"></div>
+        <div style="margin-top:26px;">
+          <button class="btn btn-primary" id="qSubmitBtn">Nộp bài &amp; Chấm điểm</button>
+        </div>
+      </div>
+
+      <div class="quiz-step hidden" id="quizResultStep">
+        <div class="quiz-result-box">
+          <div class="final-score">
+            <span class="num" id="qFinalScore">0</span><span class="max">/ <span id="qFinalTotal">0</span> câu đúng</span>
+          </div>
+          <div class="result-pill" id="qResultPill">
+            <div class="r-icon" id="qResultIcon">✓</div>
+            <div class="r-text"><b id="qResultText">PASS</b><span id="qResultSub">Đã lưu kết quả cho Operator này</span></div>
+          </div>
+        </div>
+        <div style="margin-top:22px;">
+          <button class="btn btn-ghost" id="qRetakeBtn">Làm bài khác</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="glass reveal" style="padding:10px 10px 20px;overflow-x:auto;margin-top:22px;">
+      <table class="record-table">
+        <thead><tr><th>Ngày</th><th>Operator</th><th>Process</th><th>Video / Chủ đề</th><th>Trainer</th><th>Điểm</th><th>Kết quả</th></tr></thead>
+        <tbody id="quizRecordBody"></tbody>
+      </table>
     </div>
   </div>
 </section>
@@ -938,6 +1080,290 @@ const burger = document.getElementById('burger');
 const navLinks = document.getElementById('navLinks');
 burger.addEventListener('click', ()=>{ navLinks.classList.toggle('open'); });
 navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=>navLinks.classList.remove('open')));
+
+/* =====================================================================
+   SECTION 1B: TRAINING VERIFICATION QUIZ
+   ---------------------------------------------------------------------
+   - Chọn Process -> chọn Video SOP/chủ đề -> điền thông tin Operator
+     -> làm bộ câu hỏi -> chấm điểm tự động -> lưu kết quả.
+   - Dữ liệu lưu trong localStorage của trình duyệt (key: DECAF_QUIZ_RECORDS)
+     nên khi có người khác đăng nhập/nhập tên khác, lịch sử của mọi người
+     vẫn được giữ lại (không bị mất), miễn là dùng cùng trình duyệt/máy.
+   - BỘ CÂU HỎI: đây là bộ câu hỏi MẪU (generic) mình đề xuất trước theo
+     hướng LOTO / PPE / Safety / trình tự SOP / xử lý bất thường / kết thúc
+     ca. Muốn sửa riêng cho từng Video, chỉ cần thêm vào object
+     "customQuizBank" bên dưới, key = đúng tên Video (trùng tên trong
+     mảng watched/unwatched của compMap), value = mảng câu hỏi theo đúng
+     format của getDefaultQuestions(). Nếu không có key riêng, hệ thống
+     sẽ tự dùng bộ câu hỏi mẫu.
+   ===================================================================== */
+
+/* ---- Nơi để tự thêm bộ câu hỏi RIÊNG cho từng Video (tuỳ chỉnh sau) ---- */
+const customQuizBank = {
+  // Ví dụ cách thêm (bỏ comment và sửa lại để dùng):
+  // 'Vệ sinh Starvalve Cell Extraction': [
+  //   { tag:'LOTO', q:'Câu hỏi riêng cho video này...', options:['A','B','C','D'], correct:1 },
+  // ]
+};
+
+function getDefaultQuestions(videoName){
+  return [
+    { tag:'LOTO / An toàn trước thao tác',
+      q:`Trước khi thực hiện thao tác "${videoName}", bước bắt buộc đầu tiên là gì?`,
+      options:[
+        'Thực hiện LOTO (Lockout–Tagout) và xác nhận nguồn năng lượng/thiết bị đã ở trạng thái an toàn',
+        'Bắt đầu thao tác ngay để tiết kiệm thời gian',
+        'Gọi Trainer đến xem rồi mới quyết định có làm hay không',
+        'Chỉ cần thông báo miệng cho đồng nghiệp là đủ'
+      ], correct:0 },
+    { tag:'PPE Requirement',
+      q:'PPE (trang bị bảo hộ cá nhân) khi thực hiện thao tác này cần tuân thủ theo nguyên tắc nào?',
+      options:[
+        'Không bắt buộc nếu thao tác diễn ra nhanh',
+        'Trang bị đầy đủ PPE đúng theo yêu cầu của SOP/Safety Requirement cho khu vực và thao tác đó',
+        'Chỉ cần đeo găng tay là đủ',
+        'Tuỳ Operator tự quyết định theo cảm nhận cá nhân'
+      ], correct:1 },
+    { tag:'Safety / Risk Point',
+      q:'Risk Point (điểm rủi ro) chính của thao tác này cần đặc biệt lưu ý là gì?',
+      options:[
+        'Thao tác này không có rủi ro đáng kể',
+        'Vị trí/khu vực nguy cơ đã được xác định rõ trong SOP, JHA hoặc HIRA và cần tuân thủ đúng',
+        'Chỉ cần cẩn thận chung chung, không cần xem tài liệu',
+        'Rủi ro chỉ xảy ra với người mới vào nghề'
+      ], correct:1 },
+    { tag:'Trình tự thao tác (SOP)',
+      q:'Trong quá trình thực hiện thao tác theo SOP, phát biểu nào sau đây là ĐÚNG?',
+      options:[
+        'Có thể bỏ qua bước nào cảm thấy không quan trọng để làm nhanh hơn',
+        'Phải thực hiện đúng trình tự, không được bỏ qua Critical Step trong SOP',
+        'Thứ tự thực hiện các bước không quan trọng',
+        'Chỉ cần làm đúng bước cuối cùng là được'
+      ], correct:1 },
+    { tag:'Nhận biết & xử lý bất thường',
+      q:'Nếu phát hiện bất thường trong lúc thao tác, Operator cần làm gì?',
+      options:[
+        'Tiếp tục thao tác cho xong rồi báo cáo sau',
+        'Dừng thao tác, đảm bảo an toàn cho bản thân và khu vực, sau đó báo ngay cho Trainer/Supervisor',
+        'Tự ý xử lý mà không cần thông báo cho ai',
+        'Bỏ qua nếu thấy bất thường có vẻ nhỏ'
+      ], correct:1 },
+    { tag:'Kết thúc thao tác',
+      q:'Sau khi hoàn thành thao tác, bước cuối cùng cần thực hiện trước khi rời khu vực là gì?',
+      options:[
+        'Rời khỏi khu vực ngay lập tức',
+        'Vệ sinh khu vực/thiết bị, kiểm tra lại tình trạng an toàn và ghi nhận/bàn giao đúng quy định',
+        'Không cần làm gì thêm',
+        'Chỉ cần tắt nguồn thiết bị là xong'
+      ], correct:1 }
+  ];
+}
+function getQuizQuestions(videoName){
+  return customQuizBank[videoName] || getDefaultQuestions(videoName);
+}
+
+/* ---- STORAGE HELPERS (localStorage) ---- */
+const QUIZ_STORAGE_KEY = 'DECAF_QUIZ_RECORDS';
+function loadQuizRecords(){
+  try{
+    return JSON.parse(localStorage.getItem(QUIZ_STORAGE_KEY)) || [];
+  }catch(e){ return []; }
+}
+function saveQuizRecords(records){
+  try{
+    localStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify(records));
+  }catch(e){ console.error('Không thể lưu kết quả quiz:', e); }
+}
+
+/* ---- STATE ---- */
+let quizSelectedProcess = null;
+let quizSelectedTopic = null;
+let quizCurrentQuestions = [];
+
+/* ---- STEP 1: populate process select from compMap ---- */
+const quizProcessSelect = document.getElementById('quizProcessSelect');
+compMap.forEach(p=>{
+  const opt = document.createElement('option');
+  opt.value = p.code;
+  opt.textContent = `${p.code} (${p.count} SOP Videos)`;
+  quizProcessSelect.appendChild(opt);
+});
+
+const quizTopicStep = document.getElementById('quizTopicStep');
+const quizTopicList = document.getElementById('quizTopicList');
+const quizFormStep = document.getElementById('quizFormStep');
+const quizQuestionsStep = document.getElementById('quizQuestionsStep');
+const quizResultStep = document.getElementById('quizResultStep');
+const quizTopicTitle = document.getElementById('quizTopicTitle');
+
+quizProcessSelect.addEventListener('change', ()=>{
+  const code = quizProcessSelect.value;
+  quizSelectedTopic = null;
+  quizFormStep.classList.add('hidden');
+  quizQuestionsStep.classList.add('hidden');
+  quizResultStep.classList.add('hidden');
+  if(!code){ quizTopicStep.classList.add('hidden'); return; }
+  quizSelectedProcess = compMap.find(p=>p.code===code);
+  const topics = [...quizSelectedProcess.watched, ...quizSelectedProcess.unwatched];
+  quizTopicList.innerHTML = '';
+  if(topics.length===0){
+    quizTopicList.innerHTML = `<div style="color:var(--muted);font-size:13.5px;">Process này hiện chưa có Video SOP nào.</div>`;
+  }else{
+    topics.forEach(topic=>{
+      const pill = document.createElement('div');
+      pill.className = 'topic-pill';
+      pill.textContent = topic;
+      pill.addEventListener('click', ()=>selectQuizTopic(topic, pill));
+      quizTopicList.appendChild(pill);
+    });
+  }
+  quizTopicStep.classList.remove('hidden');
+});
+
+function selectQuizTopic(topic, pillEl){
+  quizSelectedTopic = topic;
+  quizTopicList.querySelectorAll('.topic-pill').forEach(p=>p.classList.remove('active'));
+  pillEl.classList.add('active');
+
+  quizFormStep.classList.remove('hidden');
+  quizQuestionsStep.classList.remove('hidden');
+  quizResultStep.classList.add('hidden');
+  quizTopicTitle.textContent = topic;
+
+  quizCurrentQuestions = getQuizQuestions(topic);
+  renderQuizQuestions(quizCurrentQuestions);
+}
+
+function renderQuizQuestions(list){
+  const qEl = document.getElementById('quizQuestions');
+  qEl.innerHTML = '';
+  list.forEach((item,i)=>{
+    const div = document.createElement('div');
+    div.className = 'quiz-q';
+    div.innerHTML = `
+      <div class="quiz-q-tag">${item.tag}</div>
+      <div class="quiz-q-head"><div class="quiz-q-num mono">Câu ${i+1}</div><div class="quiz-q-text">${item.q}</div></div>
+      <div class="quiz-options">
+        ${item.options.map((opt,oi)=>`
+          <label class="quiz-opt" data-qi="${i}" data-oi="${oi}">
+            <input type="radio" name="quiz-q-${i}" value="${oi}">
+            <span>${opt}</span>
+          </label>
+        `).join('')}
+      </div>
+    `;
+    qEl.appendChild(div);
+  });
+}
+
+/* ---- STEP 3: lookup lịch sử theo tên Operator ---- */
+const qOperatorName = document.getElementById('qOperatorName');
+const historyBox = document.getElementById('historyBox');
+const historyList = document.getElementById('historyList');
+
+function showOperatorHistory(){
+  const name = qOperatorName.value.trim().toLowerCase();
+  if(!name){ historyBox.classList.add('hidden'); return; }
+  const records = loadQuizRecords().filter(r=>r.name.trim().toLowerCase()===name);
+  if(records.length===0){ historyBox.classList.add('hidden'); return; }
+  historyList.innerHTML = records.slice().reverse().slice(0,8).map(r=>`
+    <div class="history-row">
+      <span>${r.date} · ${r.process} · ${r.topic}</span>
+      <span class="v">${r.score}/${r.total} — ${r.result}</span>
+    </div>
+  `).join('');
+  historyBox.classList.remove('hidden');
+}
+qOperatorName.addEventListener('input', showOperatorHistory);
+qOperatorName.addEventListener('blur', showOperatorHistory);
+
+/* ---- STEP 4: nộp bài, chấm điểm, lưu kết quả ---- */
+const PASS_THRESHOLD_PERCENT = 80; // ngưỡng đạt (có thể chỉnh lại)
+
+document.getElementById('qSubmitBtn').addEventListener('click', ()=>{
+  const name = qOperatorName.value.trim();
+  if(!name){ alert('Vui lòng nhập tên Operator trước khi nộp bài.'); qOperatorName.focus(); return; }
+  if(!quizSelectedProcess || !quizSelectedTopic){ alert('Vui lòng chọn Process và Video SOP.'); return; }
+
+  const position = document.getElementById('qPosition').value.trim() || '—';
+  const trainer = document.getElementById('qTrainer').value.trim() || '—';
+  const date = document.getElementById('qDate').value || new Date().toISOString().slice(0,10);
+
+  let score = 0;
+  quizCurrentQuestions.forEach((item,i)=>{
+    const checked = document.querySelector(`input[name="quiz-q-${i}"]:checked`);
+    const selectedVal = checked ? parseInt(checked.value,10) : null;
+    document.querySelectorAll(`.quiz-opt[data-qi="${i}"]`).forEach(optEl=>{
+      const oi = parseInt(optEl.dataset.oi,10);
+      optEl.classList.remove('correct','wrong');
+      if(oi===item.correct) optEl.classList.add('correct');
+      else if(oi===selectedVal) optEl.classList.add('wrong');
+    });
+    if(selectedVal===item.correct) score++;
+  });
+
+  const total = quizCurrentQuestions.length;
+  const percent = Math.round((score/total)*100);
+  const result = percent >= PASS_THRESHOLD_PERCENT ? 'PASS' : 'FAIL';
+
+  const record = {
+    name, position, trainer, date,
+    process: quizSelectedProcess.code,
+    topic: quizSelectedTopic,
+    score, total, percent, result,
+    ts: Date.now()
+  };
+  const records = loadQuizRecords();
+  records.push(record);
+  saveQuizRecords(records);
+
+  document.getElementById('qFinalScore').textContent = score;
+  document.getElementById('qFinalTotal').textContent = total;
+  const pill = document.getElementById('qResultPill');
+  const icon = document.getElementById('qResultIcon');
+  const text = document.getElementById('qResultText');
+  const sub = document.getElementById('qResultSub');
+  if(result==='PASS'){
+    pill.style.background = 'rgba(52,211,153,0.1)'; pill.style.borderColor='rgba(52,211,153,0.35)';
+    icon.style.background='var(--green)'; icon.textContent='✓'; text.style.color='var(--green)'; text.textContent='PASS';
+  }else{
+    pill.style.background = 'rgba(248,113,113,0.1)'; pill.style.borderColor='rgba(248,113,113,0.35)';
+    icon.style.background='var(--red)'; icon.textContent='✕'; text.style.color='var(--red)'; text.textContent='FAIL';
+  }
+  sub.textContent = `Đã lưu kết quả (${score}/${total} — ${percent}%) cho ${name}`;
+
+  quizResultStep.classList.remove('hidden');
+  renderQuizRecordTable();
+  showOperatorHistory();
+  quizResultStep.scrollIntoView({behavior:'smooth', block:'center'});
+});
+
+document.getElementById('qRetakeBtn').addEventListener('click', ()=>{
+  quizTopicList.querySelectorAll('.topic-pill').forEach(p=>p.classList.remove('active'));
+  quizFormStep.classList.add('hidden');
+  quizQuestionsStep.classList.add('hidden');
+  quizResultStep.classList.add('hidden');
+  quizSelectedTopic = null;
+});
+
+/* ---- BẢNG LỊCH SỬ TOÀN BỘ (mọi Operator, mọi tên) ---- */
+function renderQuizRecordTable(){
+  const body = document.getElementById('quizRecordBody');
+  const records = loadQuizRecords();
+  if(records.length===0){
+    body.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--muted);">Chưa có bài kiểm tra nào được nộp.</td></tr>`;
+    return;
+  }
+  body.innerHTML = records.slice().reverse().map(r=>{
+    const badgeClass = r.result==='PASS' ? 'badge-green' : 'badge-red';
+    return `<tr>
+      <td>${r.date}</td><td>${r.name}</td><td>${r.process}</td><td>${r.topic}</td><td>${r.trainer}</td>
+      <td>${r.score}/${r.total} (${r.percent}%)</td>
+      <td><span class="badge ${badgeClass}">${r.result}</span></td>
+    </tr>`;
+  }).join('');
+}
+renderQuizRecordTable();
 </script>
 </body>
 </html>
