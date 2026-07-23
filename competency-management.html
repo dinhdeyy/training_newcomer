@@ -561,15 +561,15 @@ a:focus-visible, .btn:focus-visible, .map-card:focus-visible{outline:2px solid v
         </div>
         <div class="summary-stats">
           <div>
-            <div class="sstat-row"><span class="lbl">Total SOP Video</span><span class="num">59</span></div>
+            <div class="sstat-row"><span class="lbl">Total SOP Video</span><span class="num" id="sTotalSop">0</span></div>
           </div>
           <div>
-            <div class="sstat-row"><span class="lbl">Completed</span><span class="num">45 / 59</span></div>
-            <div class="mini-bar-track"><div class="mini-bar-fill" data-pct="76"></div></div>
+            <div class="sstat-row"><span class="lbl">Completed</span><span class="num" id="sCompleted">0 / 0</span></div>
+            <div class="mini-bar-track"><div class="mini-bar-fill" id="sCompletedBar" data-pct="0"></div></div>
           </div>
           <div>
-            <div class="sstat-row"><span class="lbl">Process Completed</span><span class="num">8 / 12</span></div>
-            <div class="mini-bar-track"><div class="mini-bar-fill" data-pct="67"></div></div>
+            <div class="sstat-row"><span class="lbl">Process Completed</span><span class="num" id="sProcessCompleted">0 / 0</span></div>
+            <div class="mini-bar-track"><div class="mini-bar-fill" id="sProcessBar" data-pct="0"></div></div>
           </div>
         </div>
       </div>
@@ -830,30 +830,113 @@ const compMap = [
 
 const statusLabel = {green:'Qualified', yellow:'In Training', red:'Need Assessment'};
 
+/* =====================================================================
+   ĐỒNG BỘ compMap VỚI KẾT QUẢ QUIZ (DECAF_QUIZ_RECORDS)
+   ---------------------------------------------------------------------
+   Quy tắc đã chốt:
+   1) Training % = số Video SOP đã PASS quiz / tổng số Video SOP (p.count)
+   2) Practical Assessment = "Completed" khi Training % = 100%, ngược lại "Pending"
+   3) Competency: >=85% => Qualified (green)
+                  40–84% => In Training (yellow)
+                  <40%   => Need Assessment (red)
+   "watched" (baseline demo) được giữ là đã đạt từ trước (đào tạo lịch sử
+   ngoài hệ thống quiz); mọi video còn lại trong "unwatched" sẽ tự chuyển
+   sang "đã đạt" ngay khi có bản ghi PASS tương ứng (process + tên video)
+   trong localStorage.
+   ===================================================================== */
+compMap.forEach(p=>{
+  // Danh sách gốc toàn bộ video của process (không đổi theo thời gian)
+  p.allVideos = (p.count > 0) ? [...p.watched, ...p.unwatched] : [];
+  // Các video đã coi là "đạt" từ trước khi có hệ thống quiz
+  p.baselineWatched = new Set(p.watched);
+});
+
+function syncCompMapWithQuizResults(){
+  const passRecords = loadQuizRecords().filter(r=>r.result==='PASS');
+  const passedByProcess = {};
+  passRecords.forEach(r=>{
+    if(!passedByProcess[r.process]) passedByProcess[r.process] = new Set();
+    passedByProcess[r.process].add(r.topic);
+  });
+
+  compMap.forEach(p=>{
+    const passedSet = passedByProcess[p.code] || new Set();
+    const watched = [];
+    const unwatched = [];
+    p.allVideos.forEach(v=>{
+      if(p.baselineWatched.has(v) || passedSet.has(v)) watched.push(v);
+      else unwatched.push(v);
+    });
+    p.watched = watched;
+    p.unwatched = (p.count === 0) ? ['Hiện chưa có Video SOP'] : unwatched;
+
+    const total = p.count;
+    const passedCount = watched.length;
+    p.training = total > 0 ? Math.round((passedCount/total)*100) : 0;
+    p.practical = p.training === 100 ? 'Completed' : 'Pending';
+
+    if(p.training >= 85){ p.status = 'green'; p.competency = 'Qualified'; }
+    else if(p.training >= 40){ p.status = 'yellow'; p.competency = 'In Training'; }
+    else { p.status = 'red'; p.competency = 'Need Assessment'; }
+  });
+}
+
+function updateSummaryUI(){
+  const totalSOP = compMap.reduce((s,p)=>s+p.count, 0);
+  const completedSOP = compMap.reduce((s,p)=>s+p.watched.length, 0);
+  const processCompleted = compMap.filter(p=>p.practical==='Completed').length;
+  const overallPct = totalSOP > 0 ? Math.round((completedSOP/totalSOP)*100) : 0;
+  const processPct = compMap.length > 0 ? Math.round((processCompleted/compMap.length)*100) : 0;
+
+  document.getElementById('sTotalSop').textContent = totalSOP;
+  document.getElementById('sCompleted').textContent = `${completedSOP} / ${totalSOP}`;
+  document.getElementById('sProcessCompleted').textContent = `${processCompleted} / ${compMap.length}`;
+
+  const completedBar = document.getElementById('sCompletedBar');
+  const processBar = document.getElementById('sProcessBar');
+  completedBar.dataset.pct = overallPct;
+  processBar.dataset.pct = processPct;
+  if(completedBar.style.width) completedBar.style.width = overallPct+'%';
+  if(processBar.style.width) processBar.style.width = processPct+'%';
+
+  setRingTarget(overallPct);
+}
+
+function refreshCompetencyDashboard(){
+  syncCompMapWithQuizResults();
+  updateSummaryUI();
+  if(typeof renderMapGrid === 'function') renderMapGrid();
+}
+
 /* ============ RENDER COMPETENCY MAP CARDS ============ */
 const mapGrid = document.getElementById('mapGrid');
-compMap.forEach((p,idx)=>{
-  const el = document.createElement('div');
-  el.className = `glass map-card st-${p.status} reveal`;
-  el.tabIndex = 0;
-  el.setAttribute('role','button');
-  el.innerHTML = `
-    <div class="map-top">
-      <div class="map-icon">${p.code.length>5? p.code.slice(0,4):p.code}</div>
-      <span class="badge badge-${p.status}">${statusLabel[p.status]}</span>
-    </div>
-    <div class="map-name">${p.code}</div>
-    <div class="map-count">${p.count} SOP Videos</div>
-    <div class="map-row"><span>Training Status</span><span class="v">${p.training}%</span></div>
-    <div class="map-row"><span>Practical Assessment</span><span class="v">${p.practical}</span></div>
-    <div class="map-row"><span>Competency</span><span class="v">${p.competency}</span></div>
-    <div class="map-hint">▸ Nhấn để xem chi tiết</div>
-  `;
-  const open = ()=>openModal(idx);
-  el.addEventListener('click', open);
-  el.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(); } });
-  mapGrid.appendChild(el);
-});
+let mapGridRenderedOnce = false;
+function renderMapGrid(){
+  mapGrid.innerHTML = '';
+  compMap.forEach((p,idx)=>{
+    const el = document.createElement('div');
+    el.className = `glass map-card st-${p.status} reveal${mapGridRenderedOnce ? ' show' : ''}`;
+    el.tabIndex = 0;
+    el.setAttribute('role','button');
+    el.innerHTML = `
+      <div class="map-top">
+        <div class="map-icon">${p.code.length>5? p.code.slice(0,4):p.code}</div>
+        <span class="badge badge-${p.status}">${statusLabel[p.status]}</span>
+      </div>
+      <div class="map-name">${p.code}</div>
+      <div class="map-count">${p.count} SOP Videos</div>
+      <div class="map-row"><span>Training Status</span><span class="v">${p.training}%</span></div>
+      <div class="map-row"><span>Practical Assessment</span><span class="v">${p.practical}</span></div>
+      <div class="map-row"><span>Competency</span><span class="v">${p.competency}</span></div>
+      <div class="map-hint">▸ Nhấn để xem chi tiết</div>
+    `;
+    const open = ()=>openModal(idx);
+    el.addEventListener('click', open);
+    el.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(); } });
+    mapGrid.appendChild(el);
+  });
+  mapGridRenderedOnce = true;
+}
 
 /* ============ MODAL LOGIC ============ */
 const modalOverlay = document.getElementById('modalOverlay');
@@ -1041,32 +1124,41 @@ function animateFills(selector){
 }
 animateFills('.mini-bar-fill');
 
-/* ============ RING PROGRESS (76%) ============ */
-(function(){
-  const ring = document.getElementById('ringFill');
-  const pctText = document.getElementById('ringPct');
-  const circumference = 2*Math.PI*63;
-  const target = 76;
-  const ringIo = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-      if(e.isIntersecting){
-        const offset = circumference - (target/100)*circumference;
-        ring.style.strokeDashoffset = offset;
-        let cur = 0;
-        const start = performance.now(), duration=1500;
-        function step(t){
-          const p = Math.min((t-start)/duration,1);
-          cur = Math.round(target*(1-Math.pow(1-p,3)));
-          pctText.textContent = cur+'%';
-          if(p<1) requestAnimationFrame(step);
-        }
-        requestAnimationFrame(step);
-        ringIo.unobserve(ring);
-      }
-    });
-  },{threshold:0.4});
-  ringIo.observe(ring);
-})();
+/* ============ RING PROGRESS (dynamic, tính từ compMap) ============ */
+const ringEl = document.getElementById('ringFill');
+const ringPctText = document.getElementById('ringPct');
+const ringCircumference = 2*Math.PI*63;
+let ringCurrentTarget = 0;
+let ringHasRevealed = false;
+
+function animateRingTo(target){
+  const offset = ringCircumference - (target/100)*ringCircumference;
+  ringEl.style.strokeDashoffset = offset;
+  const start = performance.now(), duration = 1200;
+  function step(t){
+    const p = Math.min((t-start)/duration, 1);
+    const cur = Math.round(target*(1-Math.pow(1-p,3)));
+    ringPctText.textContent = cur+'%';
+    if(p<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function setRingTarget(target){
+  ringCurrentTarget = target;
+  if(ringHasRevealed) animateRingTo(ringCurrentTarget);
+}
+
+const ringIo = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      ringHasRevealed = true;
+      animateRingTo(ringCurrentTarget);
+      ringIo.unobserve(ringEl);
+    }
+  });
+},{threshold:0.4});
+ringIo.observe(ringEl);
 
 /* ============ JOURNEY FILL ============ */
 const journeyIo = new IntersectionObserver((entries)=>{
@@ -1336,6 +1428,7 @@ document.getElementById('qSubmitBtn').addEventListener('click', ()=>{
   quizResultStep.classList.remove('hidden');
   renderQuizRecordTable();
   showOperatorHistory();
+  refreshCompetencyDashboard(); // cập nhật ngay Training %, Practical, Competency, Overall %
   quizResultStep.scrollIntoView({behavior:'smooth', block:'center'});
 });
 
@@ -1413,6 +1506,9 @@ function renderQuizRecordTable(){
   }).join('');
 }
 renderQuizRecordTable();
+
+/* Tính toán & hiển thị lần đầu khi tải trang (dựa trên lịch sử quiz đã lưu) */
+refreshCompetencyDashboard();
 </script>
 </body>
 </html>
